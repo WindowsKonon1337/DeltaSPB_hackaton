@@ -1,9 +1,10 @@
-FROM python:3-alpine3.11
+FROM python:3.11
 
 WORKDIR /app/
 
 COPY . /app/
 
-RUN pip install -r requirements.txt
+RUN python -m pip install --upgrade pip && \
+    pip install -r ./requirements.txt
 
 ENTRYPOINT [ "python", "__main__.py" ]

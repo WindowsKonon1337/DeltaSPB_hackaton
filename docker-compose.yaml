@@ -17,20 +17,31 @@ services:
         networks:
           ragnet:
 
-    # rag_service:
-    #     build:
-    #         context: ./src
-    #         dockerfile: Dockerfile
-    #     restart: always
-    #     depends_on:
-    #       chroma:
-    #         condition: service_healthy
-    #     volumes:
-    #       - ./volume_dumps/parse_data:/parsed_data/
-    #     ports:
-    #       - 1337:1337
-    #     networks:
-    #         ragnet:
+    search_engine:
+        build:
+            context: ./search_engine
+            dockerfile: Dockerfile
+        restart: always
+        depends_on:
+          chroma:
+            condition: service_healthy
+        ports:
+          - 1337:1337
+        networks:
+            ragnet:
+
+    tg_bot:
+        build:
+            context: ./tg_bot
+            dockerfile: Dockerfile
+        restart: always
+        depends_on:
+          chroma:
+            condition: service_healthy
+          search_engine:
+            condition: service_started
+        networks:
+            ragnet:
 
 volumes:
   chroma_data:

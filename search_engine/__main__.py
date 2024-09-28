@@ -8,12 +8,14 @@ from chromadb.utils.embedding_functions import \
 sys.path.insert(1, './utils')
 from utils.chroma.process_raw_data import process_raw_data
 from utils.question_handler.setup_rag_sys import app, setup_rag_sys
+from torch.cuda import is_available
+
 
 import pandas as pd
 
 if __name__ == '__main__':
     
-    client = chromadb.HttpClient(host='localhost')
+    client = chromadb.HttpClient(host='chroma')
     embd_model = "cointegrated/rubert-tiny2"
 
 
@@ -27,7 +29,7 @@ if __name__ == '__main__':
         'FAQ_coll',
         embedding_function=SentenceTransformerEmbeddingFunction(
             embd_model,
-            device='cuda',
+            device='cuda' if is_available() else 'cpu',
         )
     )
 
