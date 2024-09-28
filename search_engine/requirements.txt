@@ -1,0 +1,10 @@
+requests
+aiohttp
+numpy
+chromadb
+chromadb-client
+sentence-transformers
+fastapi
+uvicorn
+pandas
+openpyxl
