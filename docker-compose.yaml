@@ -11,7 +11,7 @@ services:
           start_period: 5s
           timeout: 10s
         volumes:
-          - ./volume_dumps/chroma_data:/chroma/chroma
+          - chroma_data:/chroma/chroma
         ports:
           - 8000:8000
         networks:
