@@ -4,3 +4,5 @@ chromadb-client
 sentence-transformers
 fastapi
 uvicorn
+pandas
+openpyxl
