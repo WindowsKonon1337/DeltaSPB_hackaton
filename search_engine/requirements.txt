@@ -1,0 +1,6 @@
+requests
+chromadb
+chromadb-client
+sentence-transformers
+fastapi
+uvicorn
