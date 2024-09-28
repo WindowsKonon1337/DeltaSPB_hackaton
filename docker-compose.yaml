@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+    chroma:
+        image: chromadb/chroma:latest
+        restart: always
+        healthcheck: 
+          test: curl localhost:8000/api/v1/heartbeat || exit 1
+          interval: 10s
+          retries: 2
+          start_period: 5s
+          timeout: 10s
+        volumes:
+          - ./volume_dumps/chroma_data:/chroma/chroma
+        ports:
+          - 8000:8000
+        networks:
+          ragnet:
+
+    # rag_service:
+    #     build:
+    #         context: ./src
+    #         dockerfile: Dockerfile
+    #     restart: always
+    #     depends_on:
+    #       chroma:
+    #         condition: service_healthy
+    #     volumes:
+    #       - ./volume_dumps/parse_data:/parsed_data/
+    #     ports:
+    #       - 1337:1337
+    #     networks:
+    #         ragnet:
+
+volumes:
+  chroma_data:
+
+networks:
+  ragnet:
+    driver: bridge
+    name: ragnet
