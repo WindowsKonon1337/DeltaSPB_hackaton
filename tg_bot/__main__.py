@@ -27,13 +27,12 @@ async def get_llm_answer(query: str):
                 return "Ошибка при получении данных"
 
 
-dp.message(F.text, Command('start'))
-async def hello_message(message: types.Message):
-    await message.answer('Привет! я бот технической поддержки RuTube! Пришли мне сообщение и я помогу тебе ответить на него!.')
-
 @dp.message()
 async def process_message(message: types.Message):
     query = message.text
+    if query == '/start':
+        await message.answer('Привет! я бот технической поддержки RuTube! Пришли мне сообщение и я помогу тебе ответить на него!.')
+        return
     result = await get_llm_answer(query)
     await message.answer(f'```json\n{result}\n```', parse_mode='markdown')
 
