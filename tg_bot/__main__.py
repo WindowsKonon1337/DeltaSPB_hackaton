@@ -2,7 +2,7 @@ import logging
 from aiogram import Bot, Dispatcher, types
 import asyncio
 import aiohttp
-
+import aiogram.utils.markdown as fmt
 
 API_TOKEN = '7695782071:AAFwirT7ujIUPi1mKgNf6a4vPHboceRWdqs'
 
@@ -16,11 +16,11 @@ dp = Dispatcher()
 
 
 async def get_llm_answer(query: str):
-    url = 'http://search_engine:1337/question'
+    url = 'http://search_engine:1337/predict'
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json={'question': query}) as response:
             if response.status == 200:
-                json_answer = await response.text()
+                json_answer = await response.json()
                 return json_answer
             else:
                 return "Ошибка при получении данных"
@@ -29,7 +29,7 @@ async def get_llm_answer(query: str):
 async def process_message(message: types.Message):
     query = message.text
     result = await get_llm_answer(query)
-    await message.reply(result)
+    await message.answer(f'```json\n{result}\n```', parse_mode='markdown')
 
 
 async def main() -> None:

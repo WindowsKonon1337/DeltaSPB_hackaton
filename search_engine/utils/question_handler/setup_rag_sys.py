@@ -4,6 +4,7 @@ from chromadb.utils.embedding_functions import \
 from torch.cuda import is_available
 import aiohttp
 from pydantic import BaseModel
+import json
 
 app = FastAPI()
 
@@ -19,10 +20,35 @@ class Response(BaseModel):
     class_2: str
 
 
+def str_to_json(input_str):
+    lines = input_str.strip().split('\n')
+    result_dict = {}
+    try:
+        rename_dict = {
+            'класс 1': 'class_1',
+            'класс 2': 'class_2',
+            'ответ': 'answer'
+        }
+
+        for line in lines[:2]:
+            key, value = line.split(':', 1)
+            result_dict[rename_dict[key.strip().lower()]] = value
+
+        key, value = '\n'.join(lines[2:]).split(':', 1)
+        result_dict[rename_dict[key.strip().lower()]] = value.replace('\n', ' ')
+
+        result = json.dumps(result_dict, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(e)
+        result = input_str
+
+    return result
+
+
 def setup_rag_sys(**kwargs):
     client = kwargs['client']
     embd_model = kwargs['embd_model']
-    url = 'http://91.224.86.101:8000/v1/completions'
+    url = 'http://91.224.86.101:6969/v1/completions'
 
     collection = client.get_collection(
         'FAQ_coll',
@@ -73,7 +99,7 @@ def setup_rag_sys(**kwargs):
 
         return {'system_prompt': system_prompt, 'user_prompt': user_prompt}
 
-    @app.post('/question')
+    @app.post('/predict')
     async def question(req: Request):
         async with aiohttp.ClientSession() as session:
             relevant_docs = get_relevant_documents(session, req.question)
@@ -82,5 +108,5 @@ def setup_rag_sys(**kwargs):
 
             answer = await get_answer_from_llm(session, prompts)
 
-            return answer[0]['outputs'][0]['text']
+            return str_to_json(answer[0]['outputs'][0]['text'])
     return question
