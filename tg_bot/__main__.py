@@ -1,8 +1,9 @@
-import logging
-from aiogram import Bot, Dispatcher, types
 import asyncio
+import logging
+
 import aiohttp
-import aiogram.utils.markdown as fmt
+from aiogram import Bot, Dispatcher, F, types
+from aiogram.filters import Command
 
 API_TOKEN = '7695782071:AAFwirT7ujIUPi1mKgNf6a4vPHboceRWdqs'
 
@@ -24,6 +25,11 @@ async def get_llm_answer(query: str):
                 return json_answer
             else:
                 return "Ошибка при получении данных"
+
+
+dp.message(F.text, Command('start'))
+async def hello_message(message: types.Message):
+    await message.answer('Привет! я бот технической поддержки RuTube! Пришли мне сообщение и я помогу тебе ответить на него!.')
 
 @dp.message()
 async def process_message(message: types.Message):
