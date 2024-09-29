@@ -6,12 +6,10 @@ from chromadb.utils.embedding_functions import \
     SentenceTransformerEmbeddingFunction
 
 sys.path.insert(1, './utils')
+import pandas as pd
+from torch.cuda import is_available
 from utils.chroma.process_raw_data import process_raw_data
 from utils.question_handler.setup_rag_sys import app, setup_rag_sys
-from torch.cuda import is_available
-
-
-import pandas as pd
 
 if __name__ == '__main__':
     

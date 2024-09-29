@@ -1,10 +1,11 @@
-from fastapi import FastAPI
+import json
+
+import aiohttp
 from chromadb.utils.embedding_functions import \
     SentenceTransformerEmbeddingFunction
-from torch.cuda import is_available
-import aiohttp
+from fastapi import FastAPI
 from pydantic import BaseModel
-import json
+from torch.cuda import is_available
 
 app = FastAPI()
 
