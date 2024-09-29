@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 
 import aiohttp
@@ -34,7 +35,7 @@ async def process_message(message: types.Message):
         await message.answer('Привет! я бот технической поддержки RuTube! Пришли мне сообщение и я помогу тебе ответить на него!.')
         return
     result = await get_llm_answer(query)
-    await message.answer(f'```json\n{result}\n```', parse_mode='markdown')
+    await message.answer(f'```json\n{json.dumps(result, indent=4, ensure_ascii=False)}\n```', parse_mode='markdown')
 
 
 async def main() -> None:

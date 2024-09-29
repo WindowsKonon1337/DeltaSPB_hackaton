@@ -38,12 +38,10 @@ def str_to_json(input_str):
         key, value = '\n'.join(lines[2:]).split(':', 1)
         result_dict[rename_dict[key.strip().lower()]] = value.replace('\n', ' ')
 
-        result = json.dumps(result_dict, ensure_ascii=False, indent=4)
     except Exception as e:
         print(e)
-        result = input_str
 
-    return result
+    return result_dict
 
 
 def setup_rag_sys(**kwargs):
